@@ -546,7 +546,7 @@ Client.prototype.receiveLine = function (room, message, isIntro) {
 		}
 		case 'queryresponse': {
 			if (larg[1] === 'userdetails') {
-				larg.splice(0, 2);
+				larg.splce(0, 2);
 				Bot.emit('userdetails', larg.join('|'));
 			}
 			else {
