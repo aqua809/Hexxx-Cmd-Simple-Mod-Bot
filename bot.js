@@ -1,14 +1,21 @@
 'use strict';
 let http = require('http'), SDClient = require('./client.js'), Discord = require('discord.js'), globaljs = require('./global.js'), options = {serverid: config.serverid, loginServer: 'https://play.pokemonshowdown.com/~~' + config.serverid +'/action.php', nickName: config.nickName, pass: config.pass, avatar: (config.avatar)?config.avatar:null, status: (config.status)?config.status:null, autoJoin: config.autoJoin};
+if (!config.prefix) return console.log('Missing configuration - prefix.'); //remove this line if you don't want a prefix
+if (!config.owner) return console.log('Missing configuration - owner.');
+if (!admin) return console.log('Missing administrator - update global.js /ranks/');
 global.Bot = new SDClient(config.server, config.port, options);
+admin = admin.map(user => toId(user));
+coder = coder.map(user => toId(user));
+alpha = alpha.map(user => toId(user));
+beta = beta.map(user => toId(user));
+gamma = gamma.map(user => toId(user));
+locked = locked.map(user => toId(user));
 Bot.connect();
+let client = null;
 if (config.token) {
-  let client = new Discord.client();
+  client = new Discord.Client();
   client.login(config.token);
   client.on("ready", () => {console.log(`Connected to Discord.`); if (config.discordStatus) client.user.setActivity(config.discordStatus)});
-}
-else {
-  let client = null;
 }
 let standard_input = process.stdin; standard_input.setEncoding('utf-8'); standard_input.on('data', function(data) { try {console.log(eval(data));} catch(e) {console.log(e);}});
 if (config.token) {
@@ -21,6 +28,7 @@ Bot.on('chat', function (room, time, by, message) {
   if (message === ',eval 1') return Bot.say(room, '1');
   let args = message.substr(prefix.length).split(' ');
   let commandName = tools.commandAlias(args.shift().toLowerCase());
+  if (args[0].toLowerCase() == 'constructor') return Bot.say(room, `/me constructs a constrictor to constrict ${by.substr(1)}`);
   tools.grantPseudo(by);
   if (['eval','output'].includes(commandName)) {
     if (!tools.hasPermission(toId(by), 'admin')) return Bot.say(room, 'Access denied.');
