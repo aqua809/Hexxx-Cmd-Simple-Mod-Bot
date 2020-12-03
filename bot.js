@@ -1,14 +1,21 @@
 'use strict';
 let http = require('http'), SDClient = require('./client.js'), Discord = require('discord.js'), globaljs = require('./global.js'), options = {serverid: config.serverid, loginServer: 'https://play.pokemonshowdown.com/~~' + config.serverid +'/action.php', nickName: config.nickName, pass: config.pass, avatar: (config.avatar)?config.avatar:null, status: (config.status)?config.status:null, autoJoin: config.autoJoin};
+if (!config.prefix) return console.log('Missing configuration - prefix.'); //remove this line if you don't want a prefix
+if (!config.owner) return console.log('Missing configuration - owner.');
+if (!admin) return console.log('Missing administrator - update global.js /ranks/');
 global.Bot = new SDClient(config.server, config.port, options);
+admin = admin.map(user => toId(user));
+coder = coder.map(user => toId(user));
+alpha = alpha.map(user => toId(user));
+beta = beta.map(user => toId(user));
+gamma = gamma.map(user => toId(user));
+locked = locked.map(user => toId(user));
 Bot.connect();
+let client = null;
 if (config.token) {
-  let client = new Discord.client();
+  client = new Discord.client();
   client.login(config.token);
   client.on("ready", () => {console.log(`Connected to Discord.`); if (config.discordStatus) client.user.setActivity(config.discordStatus)});
-}
-else {
-  let client = null;
 }
 let standard_input = process.stdin; standard_input.setEncoding('utf-8'); standard_input.on('data', function(data) { try {console.log(eval(data));} catch(e) {console.log(e);}});
 if (config.token) {
